@@ -1,0 +1,5 @@
+/WindowsFormsApp1/obj/*
+/WindowsFormsApp1/Properties/*
+/WindowsFormsApp1/bin/*
+/WindowsFormsApp1/.vs/*
+/WindowsFormsApp1/AngularGen.csproj
