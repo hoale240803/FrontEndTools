@@ -1,8 +1,10 @@
-﻿using System;
+﻿using AngularGenTools.Utils;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AngularGenTools
@@ -11,88 +13,11 @@ namespace AngularGenTools
     {
         private readonly string templatePath = @"D:\Test";
         private readonly string templateTreeview = @"D:\Hoa";
-        
-
+        //string strFiles = "";
+        StringBuilder strFiles = new StringBuilder();
         public AngularGenTools()
         {
             InitializeComponent();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void sourceOpenBtn_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog ofd = new OpenFileDialog() { Filter = "Text files|*.txt" })
-            {
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    using (StreamReader read = new StreamReader(ofd.FileName))
-                    {
-                        while (true)
-                        {
-                            string line = read.ReadLine();
-                            if (line == null)
-                                break;
-                            richTextBoxTest.Text = line;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void genBtn_Click(object sender, EventArgs e)
-        {
-            // validate
-            //string sourcePath = sourceTxt.Text.ToString();
-
-            //if (ValidateString.IsNullOrBlank(sourcePath))
-            //{
-            //    MessageBox.Show("Source Path not allowed empty!");
-            //}
-            //string desPath = destinationTxt.Text.ToString();
-
-            //if (ValidateString.IsNullOrBlank(desPath))
-            //{
-            //    MessageBox.Show("Destination Path not allowed empty!");
-            //}
-            //1. Get template
-
-            //1.1 read files from template source
-            //DirectoryInfo d = new DirectoryInfo(@"D:\Test"); //Assuming Test is your Folder
-
-            //FileInfo[] Files = d.GetFiles("*.*"); //Getting Text files
-            //string str = "";
-
-            //foreach (FileInfo file in Files)
-            //{
-            //    str = str + "\n " + file.Name;
-
-            //}
-            string testFileContent = @"D:\test\text1.txt";
-            richTextBoxTest.Text = DirectorySearchNameFiles(templatePath);
-            fileContent.Text = BrowserFile(testFileContent);
-
-            //1.1 show treeview
-
-            // Setting Inital Value of Progress Bar
-            // Clear All Nodes if Already Exists
-            treeViewFile.Nodes.Clear();
-            if (LoadDirectory(templateTreeview))
-            {
-                Thread.Sleep(500);
-                progressBarGen.Value = 0;
-                genCompleted.Visible = true;
-            }
-            
-
-            //2. Gen Project structure
-
-            //3. Gen Details
-
-            //4. Inform Gen success
-            //MessageBox.Show("Gen Angular Project Success");
         }
 
         public bool LoadDirectory(string dirPath)
@@ -111,75 +36,106 @@ namespace AngularGenTools
             }
             catch (Exception ex)
             {
-              
                 throw new Exception(ex.Message);
             }
-            
         }
 
-        private void LoadSubDirectories(string dirPath, TreeNode td)
+        private static void WriteAFile(string filePath, string[] lines)
         {
-            // Get all subdirectories
-            string[] subdirectoryEntries = Directory.GetDirectories(dirPath);
-            // Loop through them to see if they have any other subdirectories
-            foreach (string subdirectory in subdirectoryEntries)
+            using (StreamWriter file = new StreamWriter(filePath))
             {
-                DirectoryInfo dir = new DirectoryInfo(subdirectory);
-                TreeNode treeNode = td.Nodes.Add(dir.Name);
-                treeNode.StateImageIndex = 0;
-                treeNode.Tag = dir.FullName;
-                LoadFiles(subdirectory, treeNode);
-                LoadSubDirectories(subdirectory, treeNode);
-                UpdateProgress();
+                foreach (string line in lines)
+                {
+                     file.WriteLine(line);
+                }
             }
         }
 
-        private void LoadFiles(string dir, TreeNode treeNodeParam)
+        private string BrowserFile(string pathFile)
         {
-            string[] Files = Directory.GetFiles(dir, "*.*");
-
-            // Loop through them to see files
-            foreach (string file in Files)
+            //1. validate
+            //1.1 if folder return blank
+            if (Directory.Exists(pathFile))
             {
-                FileInfo fileInfo = new FileInfo(file);
-                TreeNode treeNode = treeNodeParam.Nodes.Add(fileInfo.Name);
-                treeNode.Tag = fileInfo.FullName;
-                treeNode.StateImageIndex = 1;
-                UpdateProgress();
+                return "";
             }
-        }
+            StringBuilder results = new StringBuilder();
 
-        private void UpdateProgress()
-        {
-            if (progressBarGen.Value < progressBarGen.Maximum)
+            string[] lines = File.ReadAllLines(pathFile);
+
+            // Display the file contents by using a foreach loop.
+            foreach (string line in lines)
             {
-                progressBarGen.Value++;
-                int percent = (int)(((double)progressBarGen.Value / (double)progressBarGen.Maximum) * 100);
-                progressBarGen.CreateGraphics().DrawString(percent.ToString() + "%", new Font("Arial", (float)8.25, FontStyle.Regular), Brushes.Black, new PointF(progressBarGen.Width / 2 - 10, progressBarGen.Height / 2 - 7));
-
-                Application.DoEvents();
+                // Use a tab to indent each line of the file.
+                results.Append("\t").Append(line);
             }
-        }
 
-        private void previewGenProjectBtn_Click(object sender, EventArgs e)
-        {
-            //1. Get template
-
-            //2. Show template
+            return results.ToString();
         }
 
         private void desOpenBtn_Click(object sender, EventArgs e)
         {
-            //1. open dialog
-            //2. get the des path value
-            //3 validate
+            FolderBrowserDialog diag = new FolderBrowserDialog();
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                destinationTxt.Text = diag.SelectedPath;
+                MessageBox.Show(diag.SelectedPath);
+            }
         }
 
         private void destinationTxt_TextChanged(object sender, EventArgs e)
         {
         }
 
-        public static string DirectorySearchNameFiles(string path, int levelNode = 0)
+        private string DirectorySearchNameFilesAsync(string path, int levelNode = 0)
+        {
+
+            //string strFiles = "";
+            try
+            {
+                string[] allfiles = Directory.GetFileSystemEntries(path, "*");
+                foreach (string file in allfiles)
+                {
+                    //1. add tab to easy to view
+                    string tab = new String('\t', levelNode);
+
+                    strFiles = strFiles.Append("\n").Append(tab).Append(Path.GetFileName(file));
+                    //strFiles = strFiles + "\n" + tab + Path.GetFileName(file);
+                    if (!Directory.Exists(file))
+                    {
+
+
+                        string filePath = Path.GetFullPath(file);
+                        //2. read a file from template
+                        string[] lines = ReadAfile(filePath);
+
+                        //3. write file to destination path
+                        string replacedText=file.Replace(sourceTxt.Text, "");
+                        string desFilePath = destinationTxt.Text + replacedText;
+                         WriteAFile(desFilePath, lines);
+                        //BrowserFile(filePath);
+
+
+                    }
+                    else
+                    {
+                        //4. create folder
+                        string newFolder = Path.Combine(destinationTxt.Text, Path.GetFileName(file));
+                        Directory.CreateDirectory(newFolder);
+                        DirectorySearchNameFilesAsync(file, levelNode+1);
+                    }
+                }
+
+                return strFiles.ToString();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return strFiles.ToString();
+            }
+        }
+
+        private string DirectorySearchNameFiles(string path, int levelNode = 0)
         {
             string strFiles = "";
             string strTotal = "";
@@ -189,7 +145,7 @@ namespace AngularGenTools
                 string[] allfiles = Directory.GetFileSystemEntries(path, "*", SearchOption.AllDirectories);
                 foreach (string f in allfiles)
                 {
-                    // add tab
+                    // add tab  
 
                     string tab = new String('\t', levelNode);
                     strFiles = strFiles + "\n " + tab + Path.GetFileName(f);
@@ -211,29 +167,167 @@ namespace AngularGenTools
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
                 return strTotal;
             }
         }
 
-        public static string BrowserFile(string pathFile)
+        private async void genBtn_Click(object sender, EventArgs e)
         {
-            StringBuilder results = new StringBuilder();
+            //1. validate
+            string sourcePath = sourceTxt.Text.ToString();
+            string desPath = destinationTxt.Text.ToString();
+
+            if (ValidateString.IsNullOrBlank(sourcePath))
+            {
+                MessageBox.Show("Source Path not allowed empty!");
+                return;
+            }
+            else if (ValidateString.IsNullOrBlank(desPath))
+            {
+                MessageBox.Show("Destination Path not allowed empty!");
+                return;
+            }
+
+            if (!Directory.Exists(sourcePath))
+            {
+                MessageBox.Show("Please choose a folder");
+            }
+            //1. Get template
+
+            //1.1 read files from template source
+            //DirectoryInfo d = new DirectoryInfo(@"D:\Test"); //Assuming Test is your Folder
+
+            //FileInfo[] Files = d.GetFiles("*.*"); //Getting Text files
+            //string str = "";
+
+            //foreach (FileInfo file in Files)
+            //{
+            //    str = str + "\n " + file.Name;
+
+            //}
+            string testFileContent = @"D:\test\text1.txt";
+            richTextBoxTest.Text = DirectorySearchNameFilesAsync(sourcePath);
+            //richTextBoxTest.Text = DirectorySearchNameFiles(templatePath);
+
+            fileContent.Text = BrowserFile(testFileContent);
+
+            //1.1 show treeview
+
+            // Setting Inital Value of Progress Bar
+            // Clear All Nodes if Already Exists
+            treeViewFile.Nodes.Clear();
+            if (LoadDirectory(sourcePath))
+            {
+                Thread.Sleep(500);
+                progressBarGen.Value = 0;
+                genCompleted.Visible = true;
+            }
+
+            //2. Gen Project structure
+
+            //3. Gen Details
+
+            //4. Inform Gen success
+            //MessageBox.Show("Gen Angular Project Success");
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+        }
+
+        private void LoadFiles(string dir, TreeNode treeNodeParam)
+        {
+            string[] Files = Directory.GetFiles(dir, "*.*");
+
+            // Loop through them to see files
+            foreach (string file in Files)
+            {
+                FileInfo fileInfo = new FileInfo(file);
+                TreeNode treeNode = treeNodeParam.Nodes.Add(fileInfo.Name);
+                treeNode.Tag = fileInfo.FullName;
+                treeNode.StateImageIndex = 1;
+                UpdateProgress();
+            }
+        }
+
+        private void LoadSubDirectories(string dirPath, TreeNode td)
+        {
+            // Get all subdirectories
+            string[] subdirectoryEntries = Directory.GetDirectories(dirPath);
+            // Loop through them to see if they have any other subdirectories
+            foreach (string subdirectory in subdirectoryEntries)
+            {
+                DirectoryInfo dir = new DirectoryInfo(subdirectory);
+                TreeNode treeNode = td.Nodes.Add(dir.Name);
+                treeNode.StateImageIndex = 0;
+                treeNode.Tag = dir.FullName;
+                LoadFiles(subdirectory, treeNode);
+                LoadSubDirectories(subdirectory, treeNode);
+                UpdateProgress();
+            }
+        }
+
+        private void previewGenProjectBtn_Click(object sender, EventArgs e)
+        {
+            //1. Get template
+
+            //2. Show template
+        }
+
+        private string[] ReadAfile(string pathFile)
+        {
+            //1. validate
+            //1.1 if folder return blank
+            if (Directory.Exists(pathFile))
+            {
+                return new String[] { };
+            }
 
             string[] lines = File.ReadAllLines(pathFile);
 
-            // Display the file contents by using a foreach loop.
-            foreach (string line in lines)
-            {
-                // Use a tab to indent each line of the file.
-                results.Append("\t").Append(line);
-            }
-
-            return results.ToString();
+            return lines;
         }
 
         private void richTextBoxTest_TextChanged(object sender, EventArgs e)
         {
+        }
+
+        private void sourceOpenBtn_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog diag = new FolderBrowserDialog();
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                sourceTxt.Text = diag.SelectedPath;
+                MessageBox.Show(diag.SelectedPath);
+            }
+        }
+
+        private void treeViewFile_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            //1. get seleted file
+            string pathOfSelectedNode = @"D:\" + treeViewFile.SelectedNode.FullPath.ToString();
+            MessageBox.Show(pathOfSelectedNode);
+
+            //2. show content fo the selected file
+
+            fileContent.Clear();
+            fileContent.Text = BrowserFile(pathOfSelectedNode);
+        }
+
+        private void UpdateProgress()
+        {
+            if (progressBarGen.Value < progressBarGen.Maximum)
+            {
+                progressBarGen.Value++;
+                int percent = (int)(((double)progressBarGen.Value / (double)progressBarGen.Maximum) * 100);
+                progressBarGen.CreateGraphics().DrawString(percent.ToString() + "%", new Font("Arial", (float)8.25, FontStyle.Regular), Brushes.Black, new PointF(progressBarGen.Width / 2 - 10, progressBarGen.Height / 2 - 7));
+
+                Application.DoEvents();
+            }
         }
     }
 }
