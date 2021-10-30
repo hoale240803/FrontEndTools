@@ -36,6 +36,9 @@ namespace AngularGenTools
             this.genProjectTxt = new System.Windows.Forms.Label();
             this.projectTab = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.fileContent = new System.Windows.Forms.RichTextBox();
             this.richTextBoxTest = new System.Windows.Forms.RichTextBox();
             this.projectType = new System.Windows.Forms.ComboBox();
             this.desOpenBtn = new System.Windows.Forms.Button();
@@ -52,9 +55,10 @@ namespace AngularGenTools
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.genComponentLbl = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
-            this.fileContent = new System.Windows.Forms.RichTextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.treeViewFile = new System.Windows.Forms.TreeView();
+            this.label3 = new System.Windows.Forms.Label();
+            this.progressBarGen = new System.Windows.Forms.ProgressBar();
+            this.genCompleted = new System.Windows.Forms.Label();
             this.projectTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -74,7 +78,7 @@ namespace AngularGenTools
             // 
             this.genBtn.BackColor = System.Drawing.Color.Green;
             this.genBtn.ForeColor = System.Drawing.Color.Ivory;
-            this.genBtn.Location = new System.Drawing.Point(276, 484);
+            this.genBtn.Location = new System.Drawing.Point(273, 636);
             this.genBtn.Name = "genBtn";
             this.genBtn.Size = new System.Drawing.Size(251, 76);
             this.genBtn.TabIndex = 1;
@@ -113,11 +117,15 @@ namespace AngularGenTools
             this.projectTab.Location = new System.Drawing.Point(12, 53);
             this.projectTab.Name = "projectTab";
             this.projectTab.SelectedIndex = 0;
-            this.projectTab.Size = new System.Drawing.Size(776, 425);
+            this.projectTab.Size = new System.Drawing.Size(776, 577);
             this.projectTab.TabIndex = 5;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.genCompleted);
+            this.tabPage1.Controls.Add(this.progressBarGen);
+            this.tabPage1.Controls.Add(this.label3);
+            this.tabPage1.Controls.Add(this.treeViewFile);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.fileContent);
@@ -134,10 +142,36 @@ namespace AngularGenTools
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(768, 399);
+            this.tabPage1.Size = new System.Drawing.Size(768, 551);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Gen Project Template";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(515, 52);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(60, 13);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "FileContent";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(324, 52);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(52, 13);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "TreeView";
+            // 
+            // fileContent
+            // 
+            this.fileContent.Location = new System.Drawing.Point(518, 73);
+            this.fileContent.Name = "fileContent";
+            this.fileContent.Size = new System.Drawing.Size(175, 196);
+            this.fileContent.TabIndex = 13;
+            this.fileContent.Text = "";
             // 
             // richTextBoxTest
             // 
@@ -179,7 +213,7 @@ namespace AngularGenTools
             // previewGenProjectBtn
             // 
             this.previewGenProjectBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.previewGenProjectBtn.Location = new System.Drawing.Point(123, 338);
+            this.previewGenProjectBtn.Location = new System.Drawing.Point(130, 489);
             this.previewGenProjectBtn.Name = "previewGenProjectBtn";
             this.previewGenProjectBtn.Size = new System.Drawing.Size(563, 41);
             this.previewGenProjectBtn.TabIndex = 7;
@@ -292,37 +326,44 @@ namespace AngularGenTools
             this.textBox4.Size = new System.Drawing.Size(100, 20);
             this.textBox4.TabIndex = 8;
             // 
-            // fileContent
+            // treeViewFile
             // 
-            this.fileContent.Location = new System.Drawing.Point(518, 73);
-            this.fileContent.Name = "fileContent";
-            this.fileContent.Size = new System.Drawing.Size(175, 196);
-            this.fileContent.TabIndex = 13;
-            this.fileContent.Text = "";
+            this.treeViewFile.Location = new System.Drawing.Point(18, 276);
+            this.treeViewFile.Name = "treeViewFile";
+            this.treeViewFile.Size = new System.Drawing.Size(252, 184);
+            this.treeViewFile.TabIndex = 16;
             // 
-            // label1
+            // label3
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(324, 52);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 13);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "TreeView";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(15, 247);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(52, 13);
+            this.label3.TabIndex = 17;
+            this.label3.Text = "TreeView";
             // 
-            // label2
+            // progressBarGen
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(515, 52);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(60, 13);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "FileContent";
+            this.progressBarGen.Location = new System.Drawing.Point(340, 436);
+            this.progressBarGen.Name = "progressBarGen";
+            this.progressBarGen.Size = new System.Drawing.Size(353, 23);
+            this.progressBarGen.TabIndex = 18;
+            // 
+            // genCompleted
+            // 
+            this.genCompleted.AutoSize = true;
+            this.genCompleted.Location = new System.Drawing.Point(476, 462);
+            this.genCompleted.Name = "genCompleted";
+            this.genCompleted.Size = new System.Drawing.Size(80, 13);
+            this.genCompleted.TabIndex = 19;
+            this.genCompleted.Text = "Gen Completed";
+            this.genCompleted.Visible = false;
             // 
             // AngularGenTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(808, 584);
+            this.ClientSize = new System.Drawing.Size(808, 724);
             this.Controls.Add(this.projectTab);
             this.Controls.Add(this.genBtn);
             this.Controls.Add(this.titleLbl);
@@ -366,6 +407,10 @@ namespace AngularGenTools
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox fileContent;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TreeView treeViewFile;
+        private System.Windows.Forms.ProgressBar progressBarGen;
+        private System.Windows.Forms.Label genCompleted;
     }
 }
 

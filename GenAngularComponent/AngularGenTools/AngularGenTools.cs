@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace AngularGenTools
@@ -8,6 +10,8 @@ namespace AngularGenTools
     public partial class AngularGenTools : Form
     {
         private readonly string templatePath = @"D:\Test";
+        private readonly string templateTreeview = @"D:\Hoa";
+        
 
         public AngularGenTools()
         {
@@ -70,12 +74,91 @@ namespace AngularGenTools
             richTextBoxTest.Text = DirectorySearchNameFiles(templatePath);
             fileContent.Text = BrowserFile(testFileContent);
 
+            //1.1 show treeview
+
+            // Setting Inital Value of Progress Bar
+            // Clear All Nodes if Already Exists
+            treeViewFile.Nodes.Clear();
+            if (LoadDirectory(templateTreeview))
+            {
+                Thread.Sleep(500);
+                progressBarGen.Value = 0;
+                genCompleted.Visible = true;
+            }
+            
+
             //2. Gen Project structure
 
             //3. Gen Details
 
             //4. Inform Gen success
             //MessageBox.Show("Gen Angular Project Success");
+        }
+
+        public bool LoadDirectory(string dirPath)
+        {
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo(dirPath);
+                //Setting ProgressBar Maximum Value
+                progressBarGen.Maximum = Directory.GetFiles(dirPath, "*.*", SearchOption.AllDirectories).Length + Directory.GetDirectories(dirPath, "**", SearchOption.AllDirectories).Length;
+                TreeNode treeNode = treeViewFile.Nodes.Add(di.Name);
+                treeNode.Tag = di.FullName;
+                treeNode.StateImageIndex = 0;
+                LoadFiles(dirPath, treeNode);
+                LoadSubDirectories(dirPath, treeNode);
+                return true;
+            }
+            catch (Exception ex)
+            {
+              
+                throw new Exception(ex.Message);
+            }
+            
+        }
+
+        private void LoadSubDirectories(string dirPath, TreeNode td)
+        {
+            // Get all subdirectories
+            string[] subdirectoryEntries = Directory.GetDirectories(dirPath);
+            // Loop through them to see if they have any other subdirectories
+            foreach (string subdirectory in subdirectoryEntries)
+            {
+                DirectoryInfo dir = new DirectoryInfo(subdirectory);
+                TreeNode treeNode = td.Nodes.Add(dir.Name);
+                treeNode.StateImageIndex = 0;
+                treeNode.Tag = dir.FullName;
+                LoadFiles(subdirectory, treeNode);
+                LoadSubDirectories(subdirectory, treeNode);
+                UpdateProgress();
+            }
+        }
+
+        private void LoadFiles(string dir, TreeNode treeNodeParam)
+        {
+            string[] Files = Directory.GetFiles(dir, "*.*");
+
+            // Loop through them to see files
+            foreach (string file in Files)
+            {
+                FileInfo fileInfo = new FileInfo(file);
+                TreeNode treeNode = treeNodeParam.Nodes.Add(fileInfo.Name);
+                treeNode.Tag = fileInfo.FullName;
+                treeNode.StateImageIndex = 1;
+                UpdateProgress();
+            }
+        }
+
+        private void UpdateProgress()
+        {
+            if (progressBarGen.Value < progressBarGen.Maximum)
+            {
+                progressBarGen.Value++;
+                int percent = (int)(((double)progressBarGen.Value / (double)progressBarGen.Maximum) * 100);
+                progressBarGen.CreateGraphics().DrawString(percent.ToString() + "%", new Font("Arial", (float)8.25, FontStyle.Regular), Brushes.Black, new PointF(progressBarGen.Width / 2 - 10, progressBarGen.Height / 2 - 7));
+
+                Application.DoEvents();
+            }
         }
 
         private void previewGenProjectBtn_Click(object sender, EventArgs e)
