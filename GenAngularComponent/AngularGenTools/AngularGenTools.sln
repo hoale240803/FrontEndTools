@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularGen", "AngularGen.csproj", "{1FE3F060-95FE-4134-9D76-6D5BFE932798}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularGenTools", "AngularGenTools.csproj", "{CD705C6C-69FF-4604-9405-83F42456EF11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1FE3F060-95FE-4134-9D76-6D5BFE932798}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1FE3F060-95FE-4134-9D76-6D5BFE932798}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1FE3F060-95FE-4134-9D76-6D5BFE932798}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1FE3F060-95FE-4134-9D76-6D5BFE932798}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD705C6C-69FF-4604-9405-83F42456EF11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD705C6C-69FF-4604-9405-83F42456EF11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD705C6C-69FF-4604-9405-83F42456EF11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD705C6C-69FF-4604-9405-83F42456EF11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B6864262-6D9B-46D6-AC47-554B1875A18E}
+		SolutionGuid = {AEF8FDDD-BC6C-4E64-A390-486E4827771D}
 	EndGlobalSection
 EndGlobal
