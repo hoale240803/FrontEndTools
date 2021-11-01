@@ -166,6 +166,7 @@ namespace AngularGenTools
             this.progressBarGen.Name = "progressBarGen";
             this.progressBarGen.Size = new System.Drawing.Size(353, 23);
             this.progressBarGen.TabIndex = 18;
+            this.progressBarGen.Visible = false;
             // 
             // label3
             // 
@@ -182,6 +183,7 @@ namespace AngularGenTools
             this.treeViewFile.Name = "treeViewFile";
             this.treeViewFile.Size = new System.Drawing.Size(252, 184);
             this.treeViewFile.TabIndex = 16;
+            this.treeViewFile.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewFile_AfterSelect);
             // 
             // label2
             // 
@@ -289,7 +291,7 @@ namespace AngularGenTools
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(768, 551);
+            this.tabPage2.Size = new System.Drawing.Size(1050, 551);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Gen Components";
             this.tabPage2.UseVisualStyleBackColor = true;

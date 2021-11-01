@@ -216,13 +216,14 @@ namespace AngularGenTools
             // Setting Inital Value of Progress Bar
             // Clear All Nodes if Already Exists
             treeViewFile.Nodes.Clear();
+            progressBarGen.Visible = true;
             if (LoadDirectory(sourcePath))
             {
                 Thread.Sleep(500);
                 progressBarGen.Value = 0;
                 genCompleted.Visible = true;
             }
-
+            progressBarGen.Visible = false;
             //2. Gen Project structure
 
             //3. Gen Details
@@ -306,15 +307,19 @@ namespace AngularGenTools
             }
         }
 
+        /// <summary>
+        /// Preview details each file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void treeViewFile_AfterSelect(object sender, TreeViewEventArgs e)
         {
             //1. get seleted file
-            string pathOfSelectedNode = @"D:\" + treeViewFile.SelectedNode.FullPath.ToString();
-            MessageBox.Show(pathOfSelectedNode);
+            string pathOfSelectedNode = treeViewFile.SelectedNode.Tag.ToString();
 
             //2. show content fo the selected file
 
-            fileContent.Clear();
+
             fileContent.Text = BrowserFile(pathOfSelectedNode);
         }
 
