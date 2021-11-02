@@ -1,10 +1,10 @@
-﻿using AngularGenTools.Utils;
+﻿using AngularGenTools.Resources;
+using AngularGenTools.Utils;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AngularGenTools
@@ -13,8 +13,10 @@ namespace AngularGenTools
     {
         private readonly string templatePath = @"D:\Test";
         private readonly string templateTreeview = @"D:\Hoa";
+
         //string strFiles = "";
-        StringBuilder strFiles = new StringBuilder();
+        private StringBuilder strFiles = new StringBuilder();
+
         public AngularGenTools()
         {
             InitializeComponent();
@@ -36,7 +38,7 @@ namespace AngularGenTools
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new AppException(ErrorMessages.FileNotFound);
             }
         }
 
@@ -46,7 +48,7 @@ namespace AngularGenTools
             {
                 foreach (string line in lines)
                 {
-                     file.WriteLine(line);
+                    file.WriteLine(line);
                 }
             }
         }
@@ -89,7 +91,6 @@ namespace AngularGenTools
 
         private string DirectorySearchNameFilesAsync(string path, int levelNode = 0)
         {
-
             //string strFiles = "";
             try
             {
@@ -103,26 +104,22 @@ namespace AngularGenTools
                     //strFiles = strFiles + "\n" + tab + Path.GetFileName(file);
                     if (!Directory.Exists(file))
                     {
-
-
                         string filePath = Path.GetFullPath(file);
                         //2. read a file from template
                         string[] lines = ReadAfile(filePath);
 
                         //3. write file to destination path
-                        string replacedText=file.Replace(sourceTxt.Text, "");
+                        string replacedText = file.Replace(sourceTxt.Text, "");
                         string desFilePath = destinationTxt.Text + replacedText;
-                         WriteAFile(desFilePath, lines);
+                        WriteAFile(desFilePath, lines);
                         //BrowserFile(filePath);
-
-
                     }
                     else
                     {
                         //4. create folder
                         string newFolder = Path.Combine(destinationTxt.Text, Path.GetFileName(file));
                         Directory.CreateDirectory(newFolder);
-                        DirectorySearchNameFilesAsync(file, levelNode+1);
+                        DirectorySearchNameFilesAsync(file, levelNode + 1);
                     }
                 }
 
@@ -145,7 +142,7 @@ namespace AngularGenTools
                 string[] allfiles = Directory.GetFileSystemEntries(path, "*", SearchOption.AllDirectories);
                 foreach (string f in allfiles)
                 {
-                    // add tab  
+                    // add tab
 
                     string tab = new String('\t', levelNode);
                     strFiles = strFiles + "\n " + tab + Path.GetFileName(f);
@@ -173,63 +170,33 @@ namespace AngularGenTools
 
         private async void genBtn_Click(object sender, EventArgs e)
         {
-            //1. validate
-            string sourcePath = sourceTxt.Text.ToString();
-            string desPath = destinationTxt.Text.ToString();
 
-            if (ValidateString.IsNullOrBlank(sourcePath))
-            {
-                MessageBox.Show("Source Path not allowed empty!");
-                return;
-            }
-            else if (ValidateString.IsNullOrBlank(desPath))
-            {
-                MessageBox.Show("Destination Path not allowed empty!");
-                return;
-            }
+           //1. Get source file
 
-            if (!Directory.Exists(sourcePath))
-            {
-                MessageBox.Show("Please choose a folder");
-            }
-            //1. Get template
+           //2. switch project type (DDD(domain driven design) or restfuls api)
 
-            //1.1 read files from template source
-            //DirectoryInfo d = new DirectoryInfo(@"D:\Test"); //Assuming Test is your Folder
+           //3. gen model for each table
 
-            //FileInfo[] Files = d.GetFiles("*.*"); //Getting Text files
-            //string str = "";
+           //4. gen model
 
-            //foreach (FileInfo file in Files)
-            //{
-            //    str = str + "\n " + file.Name;
+            //5. gen IService
+            //6. gen Implement Service
+            //7. gen IRepository
+            //8. gen Implement Repository
+            //9. gen Controller
 
-            //}
-            string testFileContent = @"D:\test\text1.txt";
-            richTextBoxTest.Text = DirectorySearchNameFilesAsync(sourcePath);
-            //richTextBoxTest.Text = DirectorySearchNameFiles(templatePath);
 
-            fileContent.Text = BrowserFile(testFileContent);
+        }
 
-            //1.1 show treeview
+        private void GenProjectStructure()
+        {
 
-            // Setting Inital Value of Progress Bar
-            // Clear All Nodes if Already Exists
-            treeViewFile.Nodes.Clear();
-            progressBarGen.Visible = true;
-            if (LoadDirectory(sourcePath))
-            {
-                Thread.Sleep(500);
-                progressBarGen.Value = 0;
-                genCompleted.Visible = true;
-            }
-            progressBarGen.Visible = false;
-            //2. Gen Project structure
 
-            //3. Gen Details
-
-            //4. Inform Gen success
-            //MessageBox.Show("Gen Angular Project Success");
+            // Gen Model
+            // Gen HTML
+            // Gen css
+            // Gen ts
+            // Gen others
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -319,7 +286,6 @@ namespace AngularGenTools
 
             //2. show content fo the selected file
 
-
             fileContent.Text = BrowserFile(pathOfSelectedNode);
         }
 
@@ -333,6 +299,69 @@ namespace AngularGenTools
 
                 Application.DoEvents();
             }
+        }
+
+        private void genTemplateBtn_Click(object sender, EventArgs e)
+        {
+            //1. validate
+            string sourcePath = sourceTxt.Text.ToString();
+            string desPath = destinationTxt.Text.ToString();
+
+            if (ValidateString.IsNullOrBlank(sourcePath))
+            {
+                MessageBox.Show("Source Path not allowed empty!");
+                return;
+            }
+            else if (ValidateString.IsNullOrBlank(desPath))
+            {
+                MessageBox.Show("Destination Path not allowed empty!");
+                return;
+            }
+
+            if (!Directory.Exists(sourcePath))
+            {
+                MessageBox.Show("Please choose a folder");
+            }
+            //1. Get template
+
+            //1.1 read files from template source
+            //DirectoryInfo d = new DirectoryInfo(@"D:\Test"); //Assuming Test is your Folder
+
+            //FileInfo[] Files = d.GetFiles("*.*"); //Getting Text files
+            //string str = "";
+
+            //foreach (FileInfo file in Files)
+            //{
+            //    str = str + "\n " + file.Name;
+
+            //}
+            string testFileContent = @"D:\test\text1.txt";
+            richTextBoxTest.Text = DirectorySearchNameFilesAsync(sourcePath);
+            //richTextBoxTest.Text = DirectorySearchNameFiles(templatePath);
+
+            fileContent.Text = BrowserFile(testFileContent);
+
+            //1.1 show treeview
+
+            // Setting Inital Value of Progress Bar
+            // Clear All Nodes if Already Exists
+            treeViewFile.Nodes.Clear();
+            progressBarGen.Visible = true;
+            if (LoadDirectory(sourcePath))
+            {
+                Thread.Sleep(500);
+                progressBarGen.Value = 0;
+                genCompleted.Visible = true;
+            }
+            progressBarGen.Visible = false;
+            //2. Gen Project structure
+            GenProjectStructure();
+
+            //3. Gen Details
+
+            //4. Inform Gen success
+            //MessageBox.Show("Gen Angular Project Success");
+
         }
     }
 }
