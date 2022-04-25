@@ -4,6 +4,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -22,7 +23,7 @@ namespace AngularGenTools
             InitializeComponent();
         }
 
-        public bool LoadDirectory(string dirPath)
+        public bool LoadDirectory(string dirPath, TreeView treeViewFile)
         {
             try
             {
@@ -32,7 +33,7 @@ namespace AngularGenTools
                 TreeNode treeNode = treeViewFile.Nodes.Add(di.Name);
                 treeNode.Tag = di.FullName;
                 treeNode.StateImageIndex = 0;
-                LoadFiles(dirPath, treeNode);
+                //LoadFiles(dirPath, treeNode);
                 LoadSubDirectories(dirPath, treeNode);
                 return true;
             }
@@ -111,6 +112,7 @@ namespace AngularGenTools
                         //3. write file to destination path
                         string replacedText = file.Replace(sourceTxt.Text, "");
                         string desFilePath = destinationTxt.Text + replacedText;
+
                         WriteAFile(desFilePath, lines);
                         //BrowserFile(filePath);
                     }
@@ -209,10 +211,10 @@ namespace AngularGenTools
 
         private void LoadFiles(string dir, TreeNode treeNodeParam)
         {
-            string[] Files = Directory.GetFiles(dir, "*.*");
+            string[] files = Directory.GetFiles(dir, "*.*");
 
             // Loop through them to see files
-            foreach (string file in Files)
+            foreach (string file in files)
             {
                 FileInfo fileInfo = new FileInfo(file);
                 TreeNode treeNode = treeNodeParam.Nodes.Add(fileInfo.Name);
@@ -235,7 +237,7 @@ namespace AngularGenTools
                 treeNode.Tag = dir.FullName;
                 LoadFiles(subdirectory, treeNode);
                 LoadSubDirectories(subdirectory, treeNode);
-                UpdateProgress();
+
             }
         }
 
@@ -335,25 +337,18 @@ namespace AngularGenTools
             //    str = str + "\n " + file.Name;
 
             //}
-            string testFileContent = @"D:\test\text1.txt";
+            //string testFileContent = @"D:\test\text1.txt";
             richTextBoxTest.Text = DirectorySearchNameFilesAsync(sourcePath);
             //richTextBoxTest.Text = DirectorySearchNameFiles(templatePath);
 
-            fileContent.Text = BrowserFile(testFileContent);
+            fileContent.Text = BrowserFile(sourcePath);
 
             //1.1 show treeview
 
             // Setting Inital Value of Progress Bar
             // Clear All Nodes if Already Exists
-            treeViewFile.Nodes.Clear();
-            progressBarGen.Visible = true;
-            if (LoadDirectory(sourcePath))
-            {
-                Thread.Sleep(500);
-                progressBarGen.Value = 0;
-                genCompleted.Visible = true;
-            }
-            progressBarGen.Visible = false;
+
+            LoadTreeViewContent(sourcePath, treeViewFile);
             //2. Gen Project structure
             GenProjectStructure();
 
@@ -361,6 +356,182 @@ namespace AngularGenTools
 
             //4. Inform Gen success
             //MessageBox.Show("Gen Angular Project Success");
+
+        }
+
+        private void sourceTxt_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void projectType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void regexSourceTxt_TextChanged(object sender, EventArgs e)
+        {
+            //FolderBrowserDialog diag = new FolderBrowserDialog();
+            //if (diag.ShowDialog() == DialogResult.OK)
+            //{
+            //    sourceTxt.Text = diag.SelectedPath;
+            //    MessageBox.Show(diag.SelectedPath);
+            //}
+        }
+
+        private void regexDesTxt_TextChanged(object sender, EventArgs e)
+        {
+
+            //FolderBrowserDialog diag = new FolderBrowserDialog();
+            //if (diag.ShowDialog() == DialogResult.OK)
+            //{
+            //    sourceTxt.Text = diag.SelectedPath;
+            //    MessageBox.Show(diag.SelectedPath);
+            //}
+        }
+
+        private void regexDesBtn_Click(object sender, EventArgs e)
+        {
+
+            FolderBrowserDialog diag = new FolderBrowserDialog();
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                regexDesTxt.Text = diag.SelectedPath;
+                //MessageBox.Show(diag.SelectedPath);
+            }
+        }
+
+        private void regexInputTxt_TextChanged(object sender, EventArgs e)
+        {
+
+
+
+            //richRegexTxt.Text = regexInputTxt.Text.ToString();
+
+
+
+            // hightlight matched string
+
+            //  retext = retext.Replace(str, String.Format("\b{0}\b", str), String.Format("<span style="font - weight:bold; background - color:yellow; ">{0,1}</span>", str))
+
+
+            //string searchPattern = String.Format("(>[^<>]*?)({0})([^<>]*?<)", searchString.Trim());
+           // content = Regex.Replace(content, searchPattern, replacePattern, RegexOptions.IgnoreCase);
+
+        }
+
+        private void regexGenBtn_Click(object sender, EventArgs e)
+        {
+            string sourcePath = regexSourceTxt.Text.ToString();
+            string desPath=   regexDesTxt.Text.ToString();
+            string regex= regexInputTxt.Text.ToString(); 
+
+            // validate
+            if (ValidateString.IsNullOrBlank(sourcePath))
+            {
+                MessageBox.Show("Source Path not allowed empty!");
+                return;
+            }
+            else if (ValidateString.IsNullOrBlank(desPath))
+            {
+                MessageBox.Show("Destination Path not allowed empty!");
+                return;
+            }
+
+            else if (ValidateString.IsNullOrBlank(regex))
+            {
+                MessageBox.Show("regex not allowed empty!");
+                return;
+            }
+
+            //
+
+            LoadTreeViewContent(sourcePath, treeRegexView);
+
+        }
+
+        private void LoadTreeViewContent(string sourcePath, TreeView treeRegexView)
+        {
+            treeViewFile.Nodes.Clear();
+            progressBarGen.Visible = true;
+            if (LoadDirectory(sourcePath, treeRegexView))
+            {
+                Thread.Sleep(500);
+                progressBarGen.Value = 0;
+                genCompleted.Visible = true;
+            }
+            progressBarGen.Visible = false;
+        }
+
+        private void exportTxtBtn_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog diag = new FolderBrowserDialog();
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                regexSourceTxt.Text = diag.SelectedPath;
+                MessageBox.Show(diag.SelectedPath);
+            }
+
+        }
+
+        private void richRegexTxt_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void previewGenCompBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void regexSourceBtn_Click(object sender, EventArgs e)
+        {
+
+            FolderBrowserDialog diag = new FolderBrowserDialog();
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                regexSourceTxt.Text = diag.SelectedPath;
+                //MessageBox.Show(diag.SelectedPath);
+            }
+        }
+
+        private void treeView2_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            string pathOfSelectedNode = treeRegexView.SelectedNode.Tag.ToString();
+
+            
+            // content = Regex.Replace(content, searchPattern, replacePattern, RegexOptions.IgnoreCase);
+
+
+            string regex = regexInputTxt.Text.ToString();
+             richRegexTxt.Text = BrowserFile(pathOfSelectedNode);
+            //string replacePattern = "$1<span style=\"background-color:red\">$2</span>$3";
+            //string searchPattern = String.Format("(>[^<>]*?)({0})([^<>]*?<)", regex.Trim());
+
+            //richRegexTxt.Text = System.Text.RegularExpressions.Regex.Replace(tempStr, searchPattern, replacePattern, RegexOptions.IgnoreCase);
+
+
+            //richRegexTxt.Text = System.Text.RegularExpressions.Regex.Replace(tempStr, String.Format("\b{0}\b", regex), String.Format("<span style='font-weight:bold; background-color:yellow;'>{0,1}</span>", tempStr));
+
+
+
+            int start = 0;
+            int end = richRegexTxt.Text.LastIndexOf(regex);
+
+            richRegexTxt.SelectAll();
+            richRegexTxt.SelectionBackColor = Color.White;
+
+            while (start < end)
+            {
+                richRegexTxt.Find(regex, start, richRegexTxt.TextLength, RichTextBoxFinds.MatchCase);
+
+                richRegexTxt.SelectionBackColor = Color.Yellow;
+
+                start = richRegexTxt.Text.IndexOf(regex, start) + 1;
+            }
+        }
+
+        private void regexSourceTxt_Click(object sender, EventArgs e)
+        {
 
         }
     }

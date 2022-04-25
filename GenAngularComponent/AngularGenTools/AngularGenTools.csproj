@@ -52,6 +52,12 @@
     <Compile Include="AngularGenTools.Designer.cs">
       <DependentUpon>AngularGenTools.cs</DependentUpon>
     </Compile>
+    <Compile Include="Handles\GenAngularComponent.cs" />
+    <Compile Include="Handles\GenFrontEndTemplate.cs" />
+    <Compile Include="Handles\InterfaceHandles\IGenBackEndComponent.cs" />
+    <Compile Include="Handles\InterfaceHandles\IGenFrontEndComponent.cs" />
+    <Compile Include="Handles\InterfaceHandles\IGenBackEndTemplate.cs" />
+    <Compile Include="Handles\InterfaceHandles\IGenFronEndTemplate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource-fr-FR.Designer.cs">
@@ -100,7 +106,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Handles\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

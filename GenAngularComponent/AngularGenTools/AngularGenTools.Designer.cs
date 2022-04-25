@@ -34,8 +34,12 @@ namespace AngularGenTools
             this.sourceTxt = new System.Windows.Forms.TextBox();
             this.destinationTxt = new System.Windows.Forms.TextBox();
             this.genProjectTxt = new System.Windows.Forms.Label();
-            this.projectTab = new System.Windows.Forms.TabControl();
+            this.Regex = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label13 = new System.Windows.Forms.Label();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.genTemplateBtn = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
             this.genCompleted = new System.Windows.Forms.Label();
             this.progressBarGen = new System.Windows.Forms.ProgressBar();
             this.label3 = new System.Windows.Forms.Label();
@@ -51,6 +55,12 @@ namespace AngularGenTools
             this.destinationLbl = new System.Windows.Forms.Label();
             this.sourceLbl = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label8 = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.label7 = new System.Windows.Forms.Label();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.desOpenCompBtn = new System.Windows.Forms.Button();
             this.sourceOpenCompBtn = new System.Windows.Forms.Button();
             this.previewGenCompBtn = new System.Windows.Forms.Button();
@@ -59,14 +69,6 @@ namespace AngularGenTools
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.genComponentLbl = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.genTemplateBtn = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.genBackEndBtn = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
@@ -84,12 +86,26 @@ namespace AngularGenTools
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.comboBox4 = new System.Windows.Forms.ComboBox();
-            this.projectTab.SuspendLayout();
+            this.regexTab = new System.Windows.Forms.TabPage();
+            this.label20 = new System.Windows.Forms.Label();
+            this.regexInputTxt = new System.Windows.Forms.TextBox();
+            this.exportTxtBtn = new System.Windows.Forms.Button();
+            this.richRegexTxt = new System.Windows.Forms.RichTextBox();
+            this.regexGenBtn = new System.Windows.Forms.Button();
+            this.regexDesBtn = new System.Windows.Forms.Button();
+            this.regexSourceBtn = new System.Windows.Forms.Button();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.regexSourceTxt = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.regexDesTxt = new System.Windows.Forms.TextBox();
+            this.treeRegexView = new System.Windows.Forms.TreeView();
+            this.label21 = new System.Windows.Forms.Label();
+            this.Regex.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.regexTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLbl
@@ -101,7 +117,6 @@ namespace AngularGenTools
             this.titleLbl.Size = new System.Drawing.Size(286, 37);
             this.titleLbl.TabIndex = 0;
             this.titleLbl.Text = "Angular Gen Tool";
-            //this.titleLbl.Click += new System.EventHandler(this.label1_Click);
             // 
             // genComponentBtn
             // 
@@ -122,6 +137,7 @@ namespace AngularGenTools
             this.sourceTxt.Name = "sourceTxt";
             this.sourceTxt.Size = new System.Drawing.Size(320, 20);
             this.sourceTxt.TabIndex = 2;
+            this.sourceTxt.TextChanged += new System.EventHandler(this.sourceTxt_TextChanged);
             // 
             // destinationTxt
             // 
@@ -141,16 +157,17 @@ namespace AngularGenTools
             this.genProjectTxt.TabIndex = 4;
             this.genProjectTxt.Text = "Gen FrontEnd Project";
             // 
-            // projectTab
+            // Regex
             // 
-            this.projectTab.Controls.Add(this.tabPage1);
-            this.projectTab.Controls.Add(this.tabPage2);
-            this.projectTab.Controls.Add(this.tabPage3);
-            this.projectTab.Location = new System.Drawing.Point(12, 53);
-            this.projectTab.Name = "projectTab";
-            this.projectTab.SelectedIndex = 0;
-            this.projectTab.Size = new System.Drawing.Size(1124, 659);
-            this.projectTab.TabIndex = 5;
+            this.Regex.Controls.Add(this.tabPage1);
+            this.Regex.Controls.Add(this.tabPage2);
+            this.Regex.Controls.Add(this.tabPage3);
+            this.Regex.Controls.Add(this.regexTab);
+            this.Regex.Location = new System.Drawing.Point(12, 53);
+            this.Regex.Name = "Regex";
+            this.Regex.SelectedIndex = 0;
+            this.Regex.Size = new System.Drawing.Size(1124, 659);
+            this.Regex.TabIndex = 5;
             // 
             // tabPage1
             // 
@@ -182,6 +199,52 @@ namespace AngularGenTools
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Gen Project Template";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(15, 221);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(59, 13);
+            this.label13.TabIndex = 23;
+            this.label13.Text = "Framework";
+            // 
+            // comboBox4
+            // 
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Items.AddRange(new object[] {
+            "Angular 12",
+            "Angular - Devstream",
+            "React (Class)",
+            "React (Function)",
+            "React (Gasby)",
+            "Vuejs - Quasar"});
+            this.comboBox4.Location = new System.Drawing.Point(60, 248);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(320, 21);
+            this.comboBox4.TabIndex = 22;
+            // 
+            // genTemplateBtn
+            // 
+            this.genTemplateBtn.BackColor = System.Drawing.Color.Green;
+            this.genTemplateBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.genTemplateBtn.ForeColor = System.Drawing.Color.Ivory;
+            this.genTemplateBtn.Location = new System.Drawing.Point(412, 557);
+            this.genTemplateBtn.Name = "genTemplateBtn";
+            this.genTemplateBtn.Size = new System.Drawing.Size(316, 76);
+            this.genTemplateBtn.TabIndex = 21;
+            this.genTemplateBtn.Text = "Gen";
+            this.genTemplateBtn.UseVisualStyleBackColor = false;
+            this.genTemplateBtn.Click += new System.EventHandler(this.genTemplateBtn_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(15, 162);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(67, 13);
+            this.label4.TabIndex = 20;
+            this.label4.Text = "Project Type";
             // 
             // genCompleted
             // 
@@ -263,6 +326,7 @@ namespace AngularGenTools
             this.projectType.Name = "projectType";
             this.projectType.Size = new System.Drawing.Size(320, 21);
             this.projectType.TabIndex = 10;
+            this.projectType.SelectedIndexChanged += new System.EventHandler(this.projectType_SelectedIndexChanged);
             // 
             // desOpenBtn
             // 
@@ -339,6 +403,66 @@ namespace AngularGenTools
             this.tabPage2.Text = "Gen Components";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(496, 32);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(80, 13);
+            this.label8.TabIndex = 26;
+            this.label8.Text = "Gen Completed";
+            this.label8.Visible = false;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(356, 6);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(353, 23);
+            this.progressBar1.TabIndex = 25;
+            this.progressBar1.Visible = false;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(20, 100);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(53, 13);
+            this.label7.TabIndex = 24;
+            this.label7.Text = "Gen From";
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "SQLScript",
+            "Model class",
+            "Excel File",
+            "CSV "});
+            this.comboBox2.Location = new System.Drawing.Point(87, 124);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(320, 21);
+            this.comboBox2.TabIndex = 23;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(19, 157);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(88, 13);
+            this.label6.TabIndex = 22;
+            this.label6.Text = "Component Type";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Full Options",
+            "Specific Options"});
+            this.comboBox1.Location = new System.Drawing.Point(86, 181);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(320, 21);
+            this.comboBox1.TabIndex = 21;
+            // 
             // desOpenCompBtn
             // 
             this.desOpenCompBtn.Location = new System.Drawing.Point(331, 294);
@@ -367,6 +491,7 @@ namespace AngularGenTools
             this.previewGenCompBtn.TabIndex = 6;
             this.previewGenCompBtn.Text = "Preview";
             this.previewGenCompBtn.UseVisualStyleBackColor = false;
+            this.previewGenCompBtn.Click += new System.EventHandler(this.previewGenCompBtn_Click);
             // 
             // label5
             // 
@@ -409,88 +534,6 @@ namespace AngularGenTools
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(238, 20);
             this.textBox4.TabIndex = 8;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(15, 162);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(67, 13);
-            this.label4.TabIndex = 20;
-            this.label4.Text = "Project Type";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(19, 157);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(88, 13);
-            this.label6.TabIndex = 22;
-            this.label6.Text = "Component Type";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Full Options",
-            "Specific Options"});
-            this.comboBox1.Location = new System.Drawing.Point(86, 181);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(320, 21);
-            this.comboBox1.TabIndex = 21;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(20, 100);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(53, 13);
-            this.label7.TabIndex = 24;
-            this.label7.Text = "Gen From";
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
-            "SQLScript",
-            "Model class",
-            "Excel File",
-            "CSV "});
-            this.comboBox2.Location = new System.Drawing.Point(87, 124);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(320, 21);
-            this.comboBox2.TabIndex = 23;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(496, 32);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(80, 13);
-            this.label8.TabIndex = 26;
-            this.label8.Text = "Gen Completed";
-            this.label8.Visible = false;
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(356, 6);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(353, 23);
-            this.progressBar1.TabIndex = 25;
-            this.progressBar1.Visible = false;
-            // 
-            // genTemplateBtn
-            // 
-            this.genTemplateBtn.BackColor = System.Drawing.Color.Green;
-            this.genTemplateBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.genTemplateBtn.ForeColor = System.Drawing.Color.Ivory;
-            this.genTemplateBtn.Location = new System.Drawing.Point(412, 557);
-            this.genTemplateBtn.Name = "genTemplateBtn";
-            this.genTemplateBtn.Size = new System.Drawing.Size(316, 76);
-            this.genTemplateBtn.TabIndex = 21;
-            this.genTemplateBtn.Text = "Gen";
-            this.genTemplateBtn.UseVisualStyleBackColor = false;
-            this.genTemplateBtn.Click += new System.EventHandler(this.genTemplateBtn_Click);
             // 
             // tabPage3
             // 
@@ -661,46 +704,182 @@ namespace AngularGenTools
             this.textBox2.Size = new System.Drawing.Size(346, 20);
             this.textBox2.TabIndex = 23;
             // 
-            // label13
+            // regexTab
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(15, 221);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(59, 13);
-            this.label13.TabIndex = 23;
-            this.label13.Text = "Framework";
+            this.regexTab.Controls.Add(this.label21);
+            this.regexTab.Controls.Add(this.treeRegexView);
+            this.regexTab.Controls.Add(this.label20);
+            this.regexTab.Controls.Add(this.regexInputTxt);
+            this.regexTab.Controls.Add(this.exportTxtBtn);
+            this.regexTab.Controls.Add(this.richRegexTxt);
+            this.regexTab.Controls.Add(this.regexGenBtn);
+            this.regexTab.Controls.Add(this.regexDesBtn);
+            this.regexTab.Controls.Add(this.regexSourceBtn);
+            this.regexTab.Controls.Add(this.label17);
+            this.regexTab.Controls.Add(this.label18);
+            this.regexTab.Controls.Add(this.regexSourceTxt);
+            this.regexTab.Controls.Add(this.label19);
+            this.regexTab.Controls.Add(this.regexDesTxt);
+            this.regexTab.Location = new System.Drawing.Point(4, 22);
+            this.regexTab.Name = "regexTab";
+            this.regexTab.Padding = new System.Windows.Forms.Padding(3);
+            this.regexTab.Size = new System.Drawing.Size(1116, 633);
+            this.regexTab.TabIndex = 3;
+            this.regexTab.Text = "Export Regex";
+            this.regexTab.UseVisualStyleBackColor = true;
             // 
-            // comboBox4
+            // label20
             // 
-            this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Items.AddRange(new object[] {
-            "Angular 12",
-            "Angular - Devstream",
-            "React (Class)",
-            "React (Function)",
-            "React (Gasby)",
-            "Vuejs - Quasar"});
-            this.comboBox4.Location = new System.Drawing.Point(60, 248);
-            this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(320, 21);
-            this.comboBox4.TabIndex = 22;
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(10, 175);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(38, 13);
+            this.label20.TabIndex = 41;
+            this.label20.Text = "Regex";
+            // 
+            // regexInputTxt
+            // 
+            this.regexInputTxt.Location = new System.Drawing.Point(55, 198);
+            this.regexInputTxt.Name = "regexInputTxt";
+            this.regexInputTxt.Size = new System.Drawing.Size(346, 20);
+            this.regexInputTxt.TabIndex = 40;
+            this.regexInputTxt.TextChanged += new System.EventHandler(this.regexInputTxt_TextChanged);
+            // 
+            // exportTxtBtn
+            // 
+            this.exportTxtBtn.BackColor = System.Drawing.Color.Green;
+            this.exportTxtBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.exportTxtBtn.ForeColor = System.Drawing.Color.Ivory;
+            this.exportTxtBtn.Location = new System.Drawing.Point(918, 583);
+            this.exportTxtBtn.Name = "exportTxtBtn";
+            this.exportTxtBtn.Size = new System.Drawing.Size(150, 44);
+            this.exportTxtBtn.TabIndex = 39;
+            this.exportTxtBtn.Text = "Export txt";
+            this.exportTxtBtn.UseVisualStyleBackColor = false;
+            this.exportTxtBtn.Click += new System.EventHandler(this.exportTxtBtn_Click);
+            // 
+            // richRegexTxt
+            // 
+            this.richRegexTxt.Location = new System.Drawing.Point(510, 43);
+            this.richRegexTxt.Name = "richRegexTxt";
+            this.richRegexTxt.Size = new System.Drawing.Size(558, 524);
+            this.richRegexTxt.TabIndex = 38;
+            this.richRegexTxt.Text = "";
+            this.richRegexTxt.TextChanged += new System.EventHandler(this.richRegexTxt_TextChanged);
+            // 
+            // regexGenBtn
+            // 
+            this.regexGenBtn.BackColor = System.Drawing.Color.Green;
+            this.regexGenBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.regexGenBtn.ForeColor = System.Drawing.Color.Ivory;
+            this.regexGenBtn.Location = new System.Drawing.Point(29, 541);
+            this.regexGenBtn.Name = "regexGenBtn";
+            this.regexGenBtn.Size = new System.Drawing.Size(427, 76);
+            this.regexGenBtn.TabIndex = 37;
+            this.regexGenBtn.Text = "Preview";
+            this.regexGenBtn.UseVisualStyleBackColor = false;
+            this.regexGenBtn.Click += new System.EventHandler(this.regexGenBtn_Click);
+            // 
+            // regexDesBtn
+            // 
+            this.regexDesBtn.Location = new System.Drawing.Point(407, 142);
+            this.regexDesBtn.Name = "regexDesBtn";
+            this.regexDesBtn.Size = new System.Drawing.Size(75, 23);
+            this.regexDesBtn.TabIndex = 36;
+            this.regexDesBtn.Text = "Open";
+            this.regexDesBtn.UseVisualStyleBackColor = true;
+            this.regexDesBtn.Click += new System.EventHandler(this.regexDesBtn_Click);
+            // 
+            // regexSourceBtn
+            // 
+            this.regexSourceBtn.Location = new System.Drawing.Point(407, 83);
+            this.regexSourceBtn.Name = "regexSourceBtn";
+            this.regexSourceBtn.Size = new System.Drawing.Size(75, 23);
+            this.regexSourceBtn.TabIndex = 35;
+            this.regexSourceBtn.Text = "Open";
+            this.regexSourceBtn.UseVisualStyleBackColor = true;
+            this.regexSourceBtn.Click += new System.EventHandler(this.regexSourceBtn_Click);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(10, 117);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(60, 13);
+            this.label17.TabIndex = 34;
+            this.label17.Text = "Destination";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(10, 58);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(41, 13);
+            this.label18.TabIndex = 33;
+            this.label18.Text = "Source";
+            // 
+            // regexSourceTxt
+            // 
+            this.regexSourceTxt.Location = new System.Drawing.Point(55, 83);
+            this.regexSourceTxt.Name = "regexSourceTxt";
+            this.regexSourceTxt.Size = new System.Drawing.Size(346, 20);
+            this.regexSourceTxt.TabIndex = 30;
+            this.regexSourceTxt.Click += new System.EventHandler(this.regexSourceTxt_Click);
+            this.regexSourceTxt.TextChanged += new System.EventHandler(this.regexSourceTxt_TextChanged);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(431, 3);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(226, 26);
+            this.label19.TabIndex = 32;
+            this.label19.Text = "Gen txt file by regex";
+            // 
+            // regexDesTxt
+            // 
+            this.regexDesTxt.Location = new System.Drawing.Point(55, 145);
+            this.regexDesTxt.Name = "regexDesTxt";
+            this.regexDesTxt.Size = new System.Drawing.Size(346, 20);
+            this.regexDesTxt.TabIndex = 31;
+            this.regexDesTxt.TextChanged += new System.EventHandler(this.regexDesTxt_TextChanged);
+            // 
+            // treeRegexView
+            // 
+            this.treeRegexView.Location = new System.Drawing.Point(55, 258);
+            this.treeRegexView.Name = "treeRegexView";
+            this.treeRegexView.Size = new System.Drawing.Size(320, 277);
+            this.treeRegexView.TabIndex = 42;
+            this.treeRegexView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView2_AfterSelect);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(10, 231);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(82, 13);
+            this.label21.TabIndex = 43;
+            this.label21.Text = "Folder Structure";
             // 
             // AngularGenTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1148, 724);
-            this.Controls.Add(this.projectTab);
+            this.Controls.Add(this.Regex);
             this.Controls.Add(this.titleLbl);
             this.Name = "AngularGenTools";
             this.Text = "Angular Gen Tool";
-            this.projectTab.ResumeLayout(false);
+            this.Regex.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.regexTab.ResumeLayout(false);
+            this.regexTab.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -713,7 +892,7 @@ namespace AngularGenTools
         private System.Windows.Forms.TextBox sourceTxt;
         private System.Windows.Forms.TextBox destinationTxt;
         private System.Windows.Forms.Label genProjectTxt;
-        private System.Windows.Forms.TabControl projectTab;
+        private System.Windows.Forms.TabControl Regex;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Label destinationLbl;
         private System.Windows.Forms.Label sourceLbl;
@@ -765,6 +944,21 @@ namespace AngularGenTools
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.TabPage regexTab;
+        private System.Windows.Forms.Button regexDesBtn;
+        private System.Windows.Forms.Button regexSourceBtn;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox regexSourceTxt;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox regexDesTxt;
+        private System.Windows.Forms.Button regexGenBtn;
+        private System.Windows.Forms.RichTextBox richRegexTxt;
+        private System.Windows.Forms.Button exportTxtBtn;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox regexInputTxt;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TreeView treeRegexView;
     }
 }
 
